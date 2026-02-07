@@ -1,0 +1,1737 @@
+#include<stdio.h>
+
+int cnt=0; // Global counter used in ATM PIN attempts
+
+/* ------------------problem 1--------------------------*/
+/*1. Write a program to accept any number up to six digits and print each digit in words.
+For eg- 1503 = one five zero three
+*/
+
+void print_digit()
+{
+	int n,count=0,a[6],i;
+
+	// Taking number input from user
+	printf("enter the number");
+	scanf("%d",&n);
+
+	// Extracting digits one by one using modulus and storing them in array
+	// Digits are stored in reverse order (last digit first)
+	while(n){
+		a[count]=n%10;
+		n=n/10;
+		count++;
+	}
+
+	// Printing digits in correct order by traversing array backwards
+	for (i=count-1;i>=0;i--){
+
+		// Converting each digit into word using switch case
+		switch(a[i]){
+		case 1:printf("One ");
+			break;
+		case 2:printf("Two ");
+			break;
+		case 3:printf("Three ");
+			break;
+		case 4:printf("Four ");
+			break;
+		case 5:printf("Five ");
+			break;
+		case 6:printf("Six ");
+			break;
+		case 7:printf("Seven ");
+			break;
+		case 8:printf("Eight ");
+			break;
+		case 9:printf("Nine ");
+			break;
+		case 0:printf("Zero ");
+			break;
+		}
+	}
+}
+
+
+/* output:
+enter the number14559
+One Four Five Five Nine
+ */
+
+
+
+
+//----------------------------problem 2----------------------------
+//Write a program to find out the day of week for a given data - 29 th Aug 1999
+
+int day_week(){
+
+	int d,m,y,total =0;
+
+	// Array used for century correction values
+	int a[4]={0,5,3,1};
+
+	int x;
+
+	// Month days arrays for leap year and non-leap year
+	int lp[]={31,29,31,30,31,30,31,31,30,31,30,31};
+	int np[]={31,28,31,30,31,30,31,31,30,31,30,31};
+
+	// Taking date input
+	printf("enter the date :");
+	scanf("%d",&d);
+
+	printf("enter the month :");
+	scanf("%d",&m);
+
+	printf("enter the year :");
+	scanf("%d",&y);
+
+	// Validating date depending on leap year or normal year
+	if(y%100==0 &&y%400==0){
+
+		// Leap year validation
+		if(lp[m-1]>=d)
+			printf("the date is valid\n");
+		else{
+			printf("the date is invalid\n");
+			return 0;
+		}
+	}
+	else{
+
+		// Non-leap year validation
+		if(np[m-1]>=d)
+			printf("the entered date is valid\n");
+		else{
+			printf("the entered date is invalid\n");
+			return 0;
+		}
+	}
+
+	// Adding day contribution
+	total =total +d%7;
+
+	// Adding month code contribution
+	switch(m){
+
+	case 1:total =total+3;
+			break;
+
+	case 2:
+		if(y%100==0 && y%400==0)
+				total=total+4;
+		else
+				total=total+3;
+	break;
+
+	case 3:
+		if(y%100==0 && y%400==0)
+				total=total+7;
+		else
+			    total=total+6;
+	break;
+
+	// Similar month offsets for all months
+	case 4: total += (y%100==0 && y%400==0)?9:8; break;
+	case 5: total += (y%100==0 && y%400==0)?12:11; break;
+	case 6: total += (y%100==0 && y%400==0)?14:13; break;
+	case 7: total += (y%100==0 && y%400==0)?17:16; break;
+	case 8: total += (y%100==0 && y%400==0)?20:19; break;
+	case 9: total += (y%100==0 && y%400==0)?22:21; break;
+	case 10: total += (y%100==0 && y%400==0)?25:24; break;
+	case 11: total += (y%100==0 && y%400==0)?27:26; break;
+	case 12: total += (y%100==0 && y%400==0)?30:29; break;
+	}
+
+	// Century correction calculation
+	x=(y/100)%4;
+	total=total+a[x];
+
+	// Year contribution within century
+	x=(y%100)-1;
+	total=total+(x/4)*2+(x-x/4);
+
+	// Final modulo to get weekday index
+	total=total%7;
+
+	// Printing weekday name
+	switch(total){
+	case 1:printf("the date specified is Monday\n"); break;
+	case 2:printf("the date specified is Tuesday\n"); break;
+	case 3:printf("the date specified is Wednesday\n"); break;
+	case 4:printf("the date specified is Thursday\n"); break;
+	case 5:printf("the date specified is Friday\n"); break;
+	case 6:printf("the date specified is saturday\n"); break;
+	case 0:printf("the date specified is sunday\n"); break;
+	}
+
+return 0;
+}
+
+
+
+/* output:
+the entered date is valid
+the date specified is saturday
+exiting the program
+ */
+
+
+
+
+
+//-----------------------problem 3-------------------
+/*Write a program to find out the number of 500, 100, 50, 20, 10, 5, 2 and 1 Rs notes can
+purchase for a given amount of money. consider amount of money is Rs 1333.
+*/
+
+void money(){
+
+	int m;
+
+	// Variables to store number of notes of each denomination
+	int _500n=0,_100n=0,_50n=0,_20n=0,_10n=0,_5n=0,_2n=0,_1n=0;
+
+	printf("enter the amount\n");
+	scanf("%d",&m);
+
+	// Greedy approach: keep dividing by highest note possible
+	while(m){
+
+	_500n=_500n+m/500;
+	m=m%500;
+
+	_100n=_100n+m/100;
+	m=m%100;
+
+	_50n=_50n+m/50;
+	m=m%50;
+
+	_20n=_20n+m/20;
+	m=m%20;
+
+	_10n=_10n+m/10;
+	m=m%10;
+
+	_5n=_5n+m/5;
+	m=m%5;
+
+	_2n=_2n+m/2;
+	m=m%2;
+
+	_1n=m; // Remaining amount will be in 1 rupee notes
+	m=m%1;
+	}
+
+	// Printing note distribution
+printf("For the specified amount the no. of \n500 notes is %d\nno. of \n100 notes is %d\nno. of \n50 notes is %d\nno. of \n20 notes is %d\nno. of \n10 notes is %d\nno. of \n5 notes is %d\nno. of \n2 notes is %d\nno. of \n1 notes is %d\n",
+_500n,_100n,_50n,_20n,_10n,_5n,_2n,_1n);
+}
+
+
+
+//---------------problem 4------------------
+//Write a program to find the difference of two dates in years, months and days?
+
+int diff_dates(){
+
+	// Variables for start date (d1,m1,y1) and end date (d2,m2,y2)
+	int d1,m1,y1,d2,m2,y2;
+
+	// Arrays storing number of days in each month for leap year and non-leap year
+	int lp[]={31,29,31,30,31,30,31,31,30,31,30,31};
+	int np[]={31,28,31,30,31,30,31,31,30,31,30,31};
+
+	// Variables to store final difference in days, months and years
+	int d=0,m=0,y=0;
+
+	// Taking starting date input from user
+	printf("enter the start date with spaces");
+	scanf("%d %d %d",&d1,&m1,&y1);
+
+	// Taking ending date input from user
+	printf("enter the end date with spaces");
+	scanf("%d %d %d",&d2,&m2,&y2);
+
+	// Checking if the start year is leap year or not and validating start date
+	if(y1%100==0 && y1%400==0){
+
+		// Leap year: checking if day is within valid range of that month
+		if(d1<1||d1>lp[m1-1]){
+			printf("invalid date");
+			return 0;
+		}
+	}
+	else{
+
+		// Non-leap year: checking if day is within valid range of that month
+		if(d1<1||d1>lp[m1-1]){
+			printf("invalid date");
+			return 0;
+		}
+	}
+
+	// Validating month values for both start and end dates
+	if(m1>12 || m1<1 ||m2>12||m2<1)
+	{
+		printf("invalid date");
+		return 0;
+	}
+
+	// If start year is greater than end year, swap the dates using XOR swapping
+	if(y1>y2){
+		d1^=d2^=d1^=d2;
+		m1^=m2^=m1^=m2;
+		y1^=y2^=y1^=y2;
+	}
+
+	// Calculating remaining days from start date to end of that month
+	if(y1%100==0 && y1%400==0){
+		d=d+lp[m1-1]-d1;
+	}
+	else
+		d=d+np[m1-1]-d1;
+
+	// Adding days passed in the ending month up to d2
+	d=d+d2;
+
+	// Moving start month forward and end month backward for month calculation
+	m1=m1+1;
+	m2=m2-1;
+
+	// Calculating month difference between start and end dates
+	m=m+12-m1;
+	m=m+m2+1;
+
+	// Adjusting years after excluding partial months
+	y1++;
+	y2--;
+
+	// Calculating year difference
+	y=y2-y1+1;
+
+	// Printing final difference result
+	printf("the difference in the given dates is %d days %d months %d years",d,m,y);
+
+	return 0;
+}
+
+
+
+/* output:
+enter the start date with spaces27 7 2003
+enter the end date with spaces7 2 2026
+the difference in the given dates is 11 days 6 months 22 years
+ */
+
+
+
+//------------------problem 5 atm ----------------------------
+/*
+ Write a program to simulate a basic ATM:
+Check PIN
+Show balance
+Allow withdrawal/deposit
+Exit
+ */
+
+// Function to check PIN authentication
+int checkpin(){
+
+	int pin;
+
+	// Asking user for ATM PIN before any operation
+	printf("to perform the required operation enter the pin \n");
+	scanf("%d",&pin);
+
+	// If correct PIN entered, allow access
+	if (pin == 1234)
+		return 1;
+
+	// If wrong PIN but attempts still remaining (max 3 tries)
+	else if (cnt < 2){
+
+		cnt ++;
+
+		// Displaying remaining chances
+		printf("you have entered the wrong pin %d more chances left before shutting the system \n",3-cnt);
+
+		// Recursive call for retry
+		checkpin();
+	}
+
+	// If wrong PIN entered 3 times, shutdown ATM
+	else {
+
+		printf("atm shutting due to wrong pin retry after sometime\n");
+
+		// Resetting counter after shutdown
+		cnt=0;
+
+		return 0;
+	}
+
+return 1;
+}
+
+// Function to display balance
+int showbalance(int amount ){
+
+	printf("The current amount is %d",amount);
+
+	return amount ;
+}
+
+// Function to withdraw money
+int withdrawal(int amount){
+
+	int w;
+
+	// Taking withdrawal amount input
+	printf("enter the amount that you want to withdraw\n");
+	scanf("%d",&w);
+
+	// Checking if withdrawal amount exceeds balance
+	if(amount<w){
+		printf("insufficient balabnce");
+		return amount;
+	}
+
+	// Deducting withdrawal amount
+	amount =amount-w;
+
+	printf("the amount %d is successfully withdrawn and the left balance is %d\n",w,amount);
+
+	return amount ;
+}
+
+// Function to deposit money
+int deposit(int amount)
+{
+	int d;
+
+	// Taking deposit amount input
+	printf("enter the amount that you want to deposit \n");
+	scanf("%d",&d);
+
+	// Adding deposit to account balance
+	amount=amount+d;
+
+	printf("the amount %d is successfully deposited in your account and the current balance is %d\n",d,amount);
+
+	return amount;
+}
+
+// ATM simulation menu function
+int atm (){
+
+	int amount=1000,ch; // Initial balance set as 1000
+
+	printf("---------------------your atm ------------------\n");
+
+	// Infinite loop for ATM menu until exit option chosen
+	while(1){
+
+	printf("enter your choice :\n");
+	printf("1.show balance \n2.withdrawal\n3.deposit\n4.exit");
+
+	scanf("%d",&ch);
+
+	// Switch case to perform ATM operations
+	switch (ch){
+
+	// Show balance option
+	case 1 :
+		if(checkpin())
+			amount = showbalance(amount);
+	break;
+
+	// Withdrawal option
+	case 2:
+		if(checkpin())
+			amount = withdrawal(amount);
+	break;
+
+	// Deposit option
+	case 3:
+		if(checkpin())
+			amount=deposit(amount);
+	break;
+
+	// Exit option
+	case 4 :
+		printf("exiting the program\n");
+		return 0;
+	break;
+	}
+	}
+
+ return 0;
+}
+
+
+/* output:
+enter which program you want to execute:
+0. exit the program
+ 1.print_digit
+2.Day-Week
+3.money
+4.difference in dates
+5.atm
+6.age_division
+5
+---------------------your atm ------------------
+enter your choice :
+1.show balance
+2.withdrawal
+3.deposit
+4.exit1
+to perform the required operation enter the pin
+1234
+The current amount is 1000enter your choice :
+1.show balance
+2.withdrawal
+3.deposit
+4.exit2
+to perform the required operation enter the pin
+2222
+you have entered the wrong pin 2 more chances left before shutting the system
+to perform the required operation enter the pin
+1234
+enter the amount that you want to withdraw
+2000
+insufficient balabnceenter your choice :
+1.show balance
+2.withdrawal
+3.deposit
+4.exit3
+to perform the required operation enter the pin
+1234
+enter the amount that you want to deposit
+12
+the amount 12 is successfully deposited in your account and the current balance is 1012
+enter your choice :
+1.show balance
+2.withdrawal
+3.deposit
+4.exit1
+to perform the required operation enter the pin
+12342
+you have entered the wrong pin 1 more chances left before shutting the system
+to perform the required operation enter the pin
+111
+atm shutting due to wrong pin retry after sometime
+The current amount is 1012enter your choice :
+1.show balance
+2.withdrawal
+3.deposit
+4.exit
+ */
+
+
+
+//-----------------------problem -6-------------
+/*
+Write a program to classify age groups:
+0–12 → Child
+13–19 → Teenager
+20–59 → Adult
+60+ → Senior citizen
+ */
+
+void age_div()
+{
+	int age;
+
+	// Taking age input from user
+	printf("enter the age of the person ");
+	scanf("%d",&age);
+
+	// Checking range and printing corresponding age group
+	if (0<=age && age<=12)
+		printf("the person specified is a child");
+
+	else if (13<=age && age<=19)
+		printf("the person specified is a Teen");
+
+	else if (20<=age && age<=59)
+		printf("the person specified is a Adult");
+
+	else if (60<=age )
+		printf("the person specified is a Senior citizen");
+}
+
+
+
+/* output:
+enter the age of the person 14
+the person specified is a Teen
+ */
+
+
+
+
+
+int main()
+{
+	int ch;
+
+	// Infinite loop to repeatedly allow user to execute any problem program
+	while(1){
+
+		printf("enter which program you want to execute:\n0. exit the program\n 1.print_digit\n2.Day-Week\n3.money\n4.difference in dates \n5.atm \n6.age_division\n");
+
+		scanf("%d",&ch);
+
+		// Switch case to execute selected problem function
+		switch(ch){
+
+		// Exit assignment
+		case 0:
+			printf("exiting assignment 3 \n");
+			return 0;
+		break;
+
+		// Problem 1 execution
+		case 1:
+			print_digit();
+		break;
+
+		// Problem 2 execution
+		case 2:
+			if(! day_week())
+			{
+				printf("exiting the program\n ");
+			}
+		break;
+
+		// Problem 3 execution
+		case 3:
+			money();
+		break;
+
+		// Problem 4 execution
+		case 4:
+			diff_dates();
+		break;
+
+		// Problem 5 execution
+		case 5:
+			if(! atm()){
+				printf("atm program exited\n");
+				return 0;
+			}
+		break;
+
+		// Problem 6 execution
+		case 6:
+			age_div();
+		break;
+		}
+	}
+
+	return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#include<stdio.h>
+
+void pattern(){
+
+	//-----------------problem 1 -------------
+/*1. Write program to print the following patterns . Pattern should be scalable, if input
+	(number of lines) is 6 then the output should be.*/
+
+	int l,i,j;
+
+	// Taking number of lines from user
+	printf("enter the no of lines the pattern should have");
+	scanf("%d",&l);
+
+	int n=65; // ASCII value of 'A'
+
+	// Outer loop controls number of rows
+	for(i=1;i<=l;i++){
+
+		n=65; // Reset character to 'A' for each new row
+
+		// Inner loop prints characters in each row
+		for(j=1;j<=i;j++){
+
+			// Printing the current alphabet character
+			printf("%c",n);
+
+			// Printing '*' only between characters, not after last one
+			if(j!=i)
+				printf("*");
+
+			n++; // Move to next alphabet character
+		}
+
+		// Moving to next line after each row
+		printf("\n");
+	}
+}
+
+/*output:
+
+A
+A*B
+A*B*C
+A*B*C*D
+A*B*C*D*E
+*/
+
+
+////-----------------problem 2 -------------
+/* 2. Execute below
+A A A A
+B B B
+C C
+D
+C C
+B B B
+*/
+
+void kp(){
+
+	int n,a=65,i,j,p;
+
+	// Taking number of lines input
+	printf("enter no of lines");
+	scanf("%d",&n);
+
+	p=n; // Copy of n used for controlling second half
+
+	// Printing upper half of pattern
+	for (i=1;i<=n/2;i++){
+
+		// Printing repeated alphabets with decreasing count
+		for (j=i;j<=(n/2)+1;j++){
+			printf("%c ",a);
+		}
+
+		printf("\n");
+
+		a++; // Move to next character
+		p--; // Reduce remaining lines counter
+	}
+
+	// Printing the middle single character line
+	printf("%c\n",a);
+	p--;
+
+	// Printing lower half of the pattern (reverse)
+	for (i=n/2;i>=1;i--){
+
+		// Only continue if lines remain
+		if (p!=0){
+
+			a--; // Step back to previous character
+
+			// Printing repeated alphabets for lower half
+			for (j=i;j<=n/2+1;j++){
+				printf("%c ",a);
+			}
+
+			p--;
+			printf("\n");
+		}
+		else break;
+	}
+}
+
+/*output
+ enter no of lines6
+A A A A
+B B B
+C C
+D
+C C
+B B B
+ */
+
+
+//problem -3
+int test1()
+{
+	int i=0;
+
+	// Loop runs until i reaches 20
+	for(i=0; i<20; i++)
+	{
+		// Switch demonstrates fall-through cases
+		switch(i)
+		{
+		case 0: i+=5;   // No break, continues to next case
+		case 1: i+=2;   // No break, continues further
+		case 5: i+=5;   // No break, continues to default
+		default: i+=4;  // Always executed due to fall-through
+				break;
+		}
+
+		// Printing updated value of i after switch modifications
+		printf("%d\n", i);
+	}
+
+	return 0;
+}
+
+/* output:
+16
+21
+ */
+
+
+//problem -4
+int test2() {
+
+	int a = 0, i = 0, b;
+
+	// Loop intended to run 5 times
+	for (i = 0;i < 5; i++)
+	{
+		// Printing current loop index value
+		printf("in loop: i=%d\n");
+
+		a++; // Incrementing variable a each iteration
+
+		// Breaking loop when i becomes 3
+		if (i == 3) break;
+	}
+}
+
+/* output:
+in loop: i=0
+in loop: i=-1177410912
+in loop: i=-1177410912
+in loop: i=-1177410912
+ */
+
+
+
+//problem -5
+int test3()
+{
+	int i = 0;
+
+	// Do-while loop executes at least once
+	do
+	{
+		i++; // Increment i at start of loop
+
+		// When i becomes 2, skip printing using continue
+		if (i == 2)
+			continue;
+
+		// This print happens only when i is not equal to 2
+		printf("In while loop ");
+
+	} while (i < 2); // Loop condition checked after execution
+
+	// Printing final value of i after loop ends
+	printf("%d\n", i);
+
+	return 0;
+}
+
+/* output:
+In while loop 2
+ */
+
+
+//--------------------problem 6 ---------------------------
+//Write a program to print numbers between 1 to 500 that are divisible by 7 using goto.
+void divisible_goto()
+{
+	int n,x=7;
+
+	// Taking limit input from user
+	printf("enter the number till which the divisibility of 7 need to be verified");
+	scanf("%d",&n);
+
+	// Label for goto loop
+	div:
+
+	// Printing current multiple of 7
+	printf("%d\n",x);
+
+	// Moving to next multiple of 7
+	x=x+7;
+
+	// If still within range, jump back to label
+	if(x<=n)
+		goto div;
+}
+
+/* output:
+ enter the number till which the divisibility of 7 need to be verified500
+7
+14
+21
+28
+35
+42
+49
+56
+63
+70
+77
+84
+91
+98
+105
+112
+119
+126
+133
+140
+147
+154
+161
+168
+175
+182
+189
+196
+203
+210
+217
+224
+231
+238
+245
+252
+259
+266
+273
+280
+287
+294
+301
+308
+315
+322
+329
+336
+343
+350
+357
+364
+371
+378
+385
+392
+399
+406
+413
+420
+427
+434
+441
+448
+455
+462
+469
+476
+483
+490
+497
+ */
+
+
+
+//-----------------problem 7 -------------
+/*Write a program to calculate the sum and average of 10 positive numbers using continue for
+skipping invalid input.*/
+void sum_and_average()
+{
+	int n,x,s=0;
+
+	// Taking number of inputs from user
+	printf("enter the number of inputs you are going to provide for the operations sum and average");
+	scanf("%d",&n);
+
+	int p=n; // Store original count for average calculation
+
+	// Loop runs until valid numbers are entered n times
+	while(n>0){
+
+		// Asking for each number input
+		printf("enter the %d number ",p-n+1);
+		scanf("%d",&x);
+
+		// If input is negative, skip without decrementing n
+		if(x<0){
+			printf("invalid input not considered enter positive numbers only\n");
+			continue;
+		}
+
+		// Adding valid number to sum
+		s=s+x;
+
+		// Decrement count only for valid input
+		n--;
+	}
+
+	// Printing sum and integer average
+	printf("the sum  and average of given %d valid inputs is %d and %d ",p,s,s/p);
+
+}
+
+/* output:
+enter the number of inputs you are going to provide for the operations sum and average4
+enter the 1 number -1
+invalid input not considered enter positive numbers only
+enter the 1 number 2
+enter the 2 number 3
+enter the 3 number 4
+enter the 4 number 5
+the sum  and average of given 4 valid inputs is 14 and 3 enter which program you want to execute
+ */
+
+
+//-----------------problem 8 -------------
+/*Write a program to input a number and a digit and find whether the digit is present in the number
+or not, if present, then count the number of times it occurs in the number? Let say 12345 number,
+check repetitive digit and count it.
+*/
+
+void find_digit(){
+
+	long int n,count=0,d ;
+
+	// Taking number input
+	printf("enter the number  ");
+	scanf("%ld",&n);
+
+	// Taking digit to search
+	printf("enter the digit that need to be found");
+	scanf("%ld",&d);
+
+	// Extracting each digit and comparing with required digit
+	while(n){
+
+		// If digit matches, increase frequency count
+		if(d==n%10)
+			count++;
+
+		// Removing last digit
+		n=n/10;
+	}
+
+	// If count is 0, digit not found
+	if(count==0)
+		printf("sorry the digit is not found\n");
+
+	// Else digit found with repetition count
+	else
+		printf("yes the digit is found and it is repeated for %ld times in number ",count);
+
+}
+
+/*output:
+enter the number  344435
+enter the digit that need to be found4
+yes the digit is found and it is repeated for 3 times in number
+ */
+
+
+//-----------------problem 9 -------------
+//Program to Set a Specific Bit of a Number
+void setting_bit(){
+
+	int l=1,n,s;
+
+	// Taking number input
+	printf("enter the number ");
+	scanf("%d",&n);
+
+	// Taking bit position to set (starting from 1 at right)
+	printf("enter which bit starting with 1 from right you want to set");
+	scanf("%d",&s);
+
+	// Left shift 1 to required bit position
+	l=l<<(s-1);
+
+	// Setting the bit using OR operation
+	n=n|l;
+
+	// Printing result after setting bit
+	printf("the result from the set bit operation is %d",n);
+}
+
+/* output:
+enter the number 4
+enter which bit starting with 1 from right you want to set2
+the result from the set bit operation is 6
+ */
+
+
+
+
+//-----------------problem 10 -------------
+//Program to clear a Specific Bit of a number
+void clearing_bit(){
+
+	int l=1,s,n;
+
+	// Taking number input
+	printf("enter the number :");
+	scanf("%d",&n);
+
+	// Taking bit position to reset (starting from 1 at right)
+	printf("enter which bit starting with 1 from the right you want to reset");
+	scanf("%d",&s);
+
+	// Creating mask with required bit cleared using NOT
+	l=~(l<<(s-1));
+
+	// Clearing bit using AND operation
+	n=n&l;
+
+	// Printing result after clearing the bit
+	printf("the result from the set bit operation is %d",n);
+}
+
+/* output:
+ enter the number :5
+enter which bit starting with 1 from the right you want to reset3
+the result from the set bit operation is 1
+ */
+
+
+//-----------------problem 11 -------------
+//Program to toggle Specific Bit of a number
+void toggle_bit(){
+
+	int l=1,s,n;
+
+	// Taking number input
+	printf("enter the number :");
+	scanf("%d",&n);
+
+	// Taking bit position to toggle
+	printf("enter which bit starting with 1 from the right you want to toggle");
+	scanf("%d",&s);
+
+	// Shifting 1 to required bit position
+	l=(l<<(s-1));
+
+	// Toggling bit using XOR operation
+	n=n^l;
+
+	// Printing result after toggling
+	printf("the result from the set bit operation is %d",n);
+}
+
+/* output :
+enter the number :5
+enter which bit starting with 1 from the right you want to toggle3
+the result from the set bit operation is 1
+ */
+
+
+//--------------------problem 12--------------------
+//Program to Check if a Specific Bit is Set or Clear(status of a bit)
+void verification_of_bit(){
+
+	int l=1,n,s;
+
+	// Taking number input
+	printf("enter the number ");
+	scanf("%d",&n);
+
+	// Taking bit position to verify
+	printf("enter which bit starting with 1 from right you want to check");
+	scanf("%d",&s);
+
+	// Shifting mask to required bit
+	l=l<<(s-1);
+
+	// Extracting bit using AND operation
+	n=n&l;
+
+	// If result is 0 -> bit is clear, else bit is set
+	if(n==0)
+		printf("the bit specified is 0");
+	else
+		printf("the bit specified is 1");
+}
+
+/* output:
+enter the number 17
+enter which bit starting with 1 from right you want to check4
+the bit specified is 0
+ */
+
+
+//-----------problem-13------------
+//Program to Count the Set Bits (1’s) in an Integer
+void count_set(){
+
+	int n,count=0,x;
+
+	// Taking number input
+	printf("enter the number");
+	scanf("%d",&n);
+
+	// Loop runs until all bits are processed
+	while(n){
+
+		// Extracting last bit using AND with 1
+		x=n&1;
+
+		// Adding extracted bit to count
+		count=count+x;
+
+		// Right shifting number to check next bit
+		n=n>>1;
+	}
+
+	// Printing total number of set bits
+	printf("the count of set bits in given integer is %d ",count);
+}
+
+
+//-----------problem-14------------
+//Program to Count the reSet Bits (0’s) in an Integer
+void count_reset(){
+
+	int n,count=0,x;
+
+	// Total number of bits in integer (usually 32 bits)
+	int p=sizeof(n)*8;
+
+	// Taking number input
+	printf("enter the number");
+	scanf("%d",&n);
+
+	// Loop runs for all bit positions
+	while(p){
+
+		// Extracting last bit
+		x=n&1;
+
+		// If bit is 0, increase reset count
+		if(!x)
+			count=count+1;
+
+		// Decrement bit counter
+		p--;
+
+		// Right shift to process next bit
+		n=n>>1;
+	}
+
+	// Printing total reset bits count
+	printf("the count of reset(0) bits in given integer is %d ",count);
+
+}
+
+/* output:
+enter the number5
+the count of reset(0) bits in given integer is 30
+*/
+
+
+//main function
+int main()
+{
+	// Displaying assignment heading
+	printf("------------assignmment -4-----------\n");
+
+	int ch;
+
+	// Infinite loop to keep showing menu until user exits
+	while(1){
+
+		// Menu options for executing different problems
+		printf("enter which program you want to execute\n0.exit\n1.pattern\n2.k-pattern\n3.divisible_by_7\n4.sum_and_average\n5.finding frequency of digit\n6.setting bit\n7.resetting bit\n8.toggle bit\n9.checking if bit is set or not\n10.count of set bits\n11.count of reset bits\n12.another approach to reset bit count\n");
+
+		// Reading user choice
+		scanf("%d",&ch);
+
+		// Switch case to call the corresponding function
+		switch(ch){
+
+		// Exit option
+		case 0:
+			printf("exiting assignment-4");
+			return 0;
+			break;
+
+		// Problem 1: Alphabet pattern printing
+		case 1:
+			pattern();
+			break;
+
+		// Problem 2: K-shape alphabet pattern
+		case 2:
+			kp();
+			break;
+
+		// Problem 6: Divisible by 7 using goto
+		case 3 :
+			divisible_goto();
+			break;
+
+		// Problem 7: Sum and average using continue
+		case 4:
+			sum_and_average();
+			break;
+
+		// Problem 8: Digit frequency finder
+		case 5:
+			find_digit();
+			break;
+
+		// Problem 9: Setting a specific bit
+		case 6 :
+			setting_bit();
+			break;
+
+		// Problem 10: Clearing a specific bit
+		case 7 :
+			clearing_bit();
+			break;
+
+		// Problem 11: Toggling a specific bit
+		case 8 :
+			toggle_bit();
+			break;
+
+		// Problem 12: Verifying bit status (0 or 1)
+		case 9:
+			verification_of_bit();
+			break;
+
+		// Problem 13: Counting set bits (1s)
+		case 10 :
+			count_set();
+			break;
+
+		// Problem 14: Counting reset bits (0s)
+		case 11:
+			count_reset();
+			break;
+
+		// Extra switch-case tracing program (test1)
+		case 12:
+			test1();
+			break;
+
+		// Loop break demonstration program (test2)
+		case 13:
+			test2();
+			break;
+
+		// Continue demonstration program (test3)
+		case 14:
+			test3();
+			break;
+		}
+	}
+
+	// Program end (this line will not be reached due to return inside loop)
+	return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#include<stdio.h>
+
+/* ------------------- Problem 1 ------------------- */
+/* Program to check whether a character is:
+   Numeric / Uppercase / Lowercase / Special character */
+
+void type_char(){
+
+    char c;
+
+    // Taking character input from user
+    printf("enter the character\n");
+    scanf(" %c",&c);
+
+    // Using ternary operator to classify character type
+    ('0'<=c && c<='9') ? printf("the given character is numeric\n") :
+    ('A'<=c && c<='Z') ? printf("the given character is upper case\n") :
+    ('a'<=c && c<='z') ? printf("the given character is lower case\n") :
+                        printf("the given character is special character\n");
+}
+
+/* output:
+enter the character
+2
+the given character is numeric
+ */
+
+
+/* ------------------- Problem 2 ------------------- */
+/* Program to Check if a Specific Bit is Set or Clear */
+
+void verification_of_bit(){
+
+    int l=1,n,s;
+
+    // Taking number input
+    printf("enter the number ");
+    scanf("%d",&n);
+
+    // Taking bit position input
+    printf("enter which bit starting with 1 from right you want to check");
+    scanf("%d",&s);
+
+    // Left shifting mask to required bit position
+    l = l << (s-1);
+
+    // Extracting that bit using AND operation
+    n = n & l;
+
+    // If result is 0 -> bit is clear, else bit is set
+    if(n==0)
+        printf("the bit specified is 0");
+    else
+        printf("the bit specified is 1");
+}
+
+/* output:
+enter the number 17
+enter which bit starting with 1 from right you want to check4
+the bit specified is 0
+ */
+
+
+
+//--------------------problem 3--------------------
+/*
+Evaluate and find out which one is appropriate and equal to x%y
+oy-(x/y)*x
+ox-(x/y)*y
+o x-(y/x)*x
+o y-(y/x)*y
+ */
+void rem(){
+int x,y;
+printf("enter the dividend");
+scanf("%d",&x);
+printf("enter the divisor");
+scanf("%d",&y);
+printf("%d original modulus result\n",x%y);
+printf("%d  y-(x/y)*x \n",y-(x/y)*x);
+printf("%d  x-(x/y)*y \n",x-(x/y)*y);
+printf("%d  x-(y/x)*x \n",x-(y/x)*x);
+printf("%d  y-(y/x)*y \n",y-(y/x)*y);
+
+}
+
+
+/* output:
+enter the dividend14
+enter the divisor6
+2 original modulus result
+-22  y-(x/y)*x
+2  x-(x/y)*y
+14  x-(y/x)*x
+6  y-(y/x)*y
+ */
+
+
+//--------------------problem-4-----------
+void test1(){
+	int x,y; x=10;
+	y=sizeof(++x);
+	printf("x=%d y=%d", x,y);
+}
+
+
+
+/* output:
+x=10 y=4
+ */
+
+
+
+//--------------------problem-5-----------
+void test2 ()
+{
+int x=!0*20;
+printf("%d\n",x);
+}
+
+
+/* output:
+20
+ */
+
+
+
+//--------------------problem-6-----------
+void test3()
+{
+int a=3, b=4, c;
+c=b==4||a!=3;
+printf ("%d\n",c);
+
+}
+
+
+/* output:
+1
+ */
+
+
+
+/* ------------------- Problem 7 ------------------- */
+/*
+Raise flag waiting scenario:
+Code keeps waiting until raise flag becomes 1
+*/
+
+int raise = 0;
+
+// Function to repeatedly ask user until raise becomes 1
+void flag(){
+
+    if (raise != 1){
+        printf("modulate raise is currently not set");
+        scanf("%d",&raise);
+    }
+}
+
+// Function that waits until raise flag becomes 1
+void raise_flag(){
+
+    // Loop continues until raise becomes 1
+    while(raise != 1)
+        flag();
+
+    // Once flag is set, print confirmation
+    if(raise == 1)
+        printf("the flag bit is now 1");
+}
+
+/* output:
+modulate raise is currently not set0
+modulate raise is currently not set0
+modulate raise is currently not set0
+modulate raise is currently not set8
+modulate raise is currently not set1
+the flag bit is now 1
+ */
+
+
+
+//-----------------problem -8--------------
+/*
+ What is a difference between unsigned int and signed int in C? Write description.
+ */
+/*
+answer:
+the unsigned integer and signed integer both are of same size that is they occupy in general a 4 bytes
+which is 32 bit space in memory
+so the values that can be stored in
+unsigned int are from 0 to (2 power 32) -1 in case of overflow the ouput is wrapped around from 0 again
+where as in signed int  values are from -(2 power 31) to (2 power 31)  -1
+in case of overflow the ouput is wrapped around from -max or +max depending on the overflow occured again
+
+*/
+
+
+//-----------------problem -8--------------
+void test5() {
+int i = 0;
+for(i = 0; i < 5; i++);
+printf("%d\n", i);
+}
+
+//-----------------problem -8--------------
+void test6() {
+unsigned char x = 250;
+for(; x >= 0; x--) {
+printf("%u ", x);
+if (x == 0) break;
+}
+
+
+//-----------------problem -8--------------
+void test7()
+{
+int x = 1, y = 0, z = 3;
+x > y ? printf("%d", z) : return z;
+}
+
+
+//-----------------problem -8--------------
+void test8()
+{
+int i = -3;
+int k = i % 2;
+printf("%d\n", k);
+}
+
+int main(){
+	int ch;
+	while(1){
+		printf("enter  the program that you want ot execute:\n0.exit\n1.type_char_category\n2.check remainder operation\n3.test1\n4.test2\n5.test3\n6.raise_flag\n7.test5\n8.test6\n9.test7\n10.test8");
+		scanf("%d",&ch);
+		switch(ch){
+		case 0:printf("exiting assignment 5");
+				return 0;
+				break;
+		case 1:type_char();
+				break;
+		case 2:rem();
+				break;
+		case 3:test1();
+				break;
+		case 4:test2();
+				break;
+		case 5:test3();
+				break;
+		case 6:raise_flag();
+				break;
+		case 7:test5();
+				break;
+		case 8:test6();
+				break;
+		case 9:test7();
+				break;
+		case 10:test8();
+				break;
+		}
+	}
+	return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
